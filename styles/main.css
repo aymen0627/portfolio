@@ -34,7 +34,24 @@ body {
     width: 100%;
     padding: 2rem;
     mix-blend-mode: difference;
-    z-index: 100;
+    z-index: 2000; /* Ensure it's above all other elements */
+}
+
+.nav {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0 2rem;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    text-decoration: none;
+    mix-blend-mode: difference;
+    transition: transform 0.3s ease;
+    color: white; /* Make sure it's visible on all backgrounds */
 }
 
 .hero {
@@ -743,7 +760,7 @@ body {
     width: 100vw;
     height: 100vh;
     background: var(--background-color);
-    z-index: 1000;
+    z-index: 1001;
     opacity: 0;
     pointer-events: none;
 }
@@ -757,4 +774,17 @@ body {
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
+}
+
+/* Optional: Add smooth scroll behavior */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Add styles for card clone during transition */
+.card-clone {
+    position: fixed;
+    pointer-events: none;
+    transform-origin: center;
+    will-change: transform;
 } 

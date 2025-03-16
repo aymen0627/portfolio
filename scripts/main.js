@@ -144,29 +144,47 @@ class CardDeck {
         if (this.isAnimating) return;
         this.isAnimating = true;
 
-        // Create project page transition overlay
+        // Get card's current position and dimensions
+        const cardRect = card.getBoundingClientRect();
+        const scaleX = window.innerWidth / cardRect.width;
+        const scaleY = window.innerHeight / cardRect.height;
+        const scale = Math.max(scaleX, scaleY) * 1.1; // Extra 10% to ensure full coverage
+
+        // Create transition overlay
         const overlay = document.createElement('div');
         overlay.className = 'page-transition';
         document.body.appendChild(overlay);
 
+        // Clone the card for the zoom animation
+        const cardClone = card.cloneNode(true);
+        cardClone.style.position = 'fixed';
+        cardClone.style.top = `${cardRect.top}px`;
+        cardClone.style.left = `${cardRect.left}px`;
+        cardClone.style.width = `${cardRect.width}px`;
+        cardClone.style.height = `${cardRect.height}px`;
+        cardClone.style.zIndex = '1000';
+        document.body.appendChild(cardClone);
+
         // Animate transition
         const tl = gsap.timeline({
             onComplete: () => {
-                // Actually navigate to the project page
                 window.location.href = `/projects/${projectSlug}`;
             }
         });
 
-        tl.to(card, {
-            scale: 0.95,
-            duration: 0.3,
-            ease: "power2.inOut"
-        })
-        .to(overlay, {
-            opacity: 1,
-            duration: 0.5,
-            ease: "power2.inOut"
-        });
+        tl
+            .to(cardClone, {
+                duration: 0.8,
+                scale: scale,
+                x: window.innerWidth/2 - (cardRect.left + cardRect.width/2),
+                y: window.innerHeight/2 - (cardRect.top + cardRect.height/2),
+                ease: "power2.inOut"
+            })
+            .to(overlay, {
+                opacity: 1,
+                duration: 0.3,
+                ease: "power2.inOut"
+            }, "-=0.2");
     }
 
     closeProject(projectPage, closeButton) {
@@ -280,7 +298,6 @@ function animateTitle() {
         trigger: '.section-title',
         start: 'top center+=100',
         end: 'bottom center',
-        markers: true,
         once: true,
         onEnter: () => {
             // First make the section visible
@@ -350,6 +367,34 @@ document.addEventListener('DOMContentLoaded', () => {
     animateTitle();
     const cardDeck = new CardDeck();
     handleScroll();
+
+    const logo = document.querySelector('.logo');
+    
+    logo.addEventListener('click', (e) => {
+        // Only handle if we're not on the home page
+        if (window.location.pathname !== '/') {
+            e.preventDefault();
+            
+            // Create transition overlay
+            const overlay = document.createElement('div');
+            overlay.className = 'page-transition';
+            document.body.appendChild(overlay);
+            
+            // Animate transition
+            gsap.to(overlay, {
+                opacity: 1,
+                duration: 0.5,
+                ease: "power2.inOut",
+                onComplete: () => {
+                    window.location.href = '/';
+                }
+            });
+        } else if (window.location.pathname === '/' && window.scrollY > 0) {
+            // If on home page but scrolled down, smooth scroll to top
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    });
 });
 
 // Close expanded card when clicking outside or pressing escape
