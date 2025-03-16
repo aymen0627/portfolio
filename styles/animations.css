@@ -1,0 +1,120 @@
+@keyframes reveal {
+    from {
+        opacity: 0;
+        transform: translateY(100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* For browsers that support @scroll-timeline */
+@supports (animation-timeline: scroll()) {
+    .scroll-animate {
+        animation-timeline: scroll();
+        animation-range: entry 25% cover 50%;
+    }
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes subtleMove {
+    from {
+        background-position: 0 0;
+    }
+    to {
+        background-position: 100% 100%;
+    }
+}
+
+/* Add smooth transitions for interactive elements */
+.nav a,
+.project-grid article {
+    transition: transform var(--transition-speed) ease,
+                opacity var(--transition-speed) ease;
+}
+
+/* Ensure animations are disabled for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+@keyframes scaleDown {
+    from {
+        font-size: clamp(4rem, 12vw, 10rem);
+    }
+    to {
+        font-size: clamp(2rem, 8vw, 6rem);
+    }
+}
+
+@keyframes scaleUp {
+    from {
+        font-size: clamp(2rem, 8vw, 6rem);
+    }
+    to {
+        font-size: clamp(4rem, 12vw, 10rem);
+    }
+}
+
+@keyframes squishVertical {
+    from {
+        transform: scaleY(1.5);
+    }
+    to {
+        transform: scaleY(0.8);
+    }
+}
+
+@keyframes stretchVertical {
+    from {
+        transform: scaleY(0.8);
+    }
+    to {
+        transform: scaleY(1.5);
+    }
+}
+
+/* Fallback for browsers that don't support scroll-driven animations */
+@supports not (animation-timeline: scroll(root)) {
+    .animate-text:first-child {
+        transform: scaleY(1.2);
+    }
+    .animate-text:last-child {
+        transform: scaleY(1.2);
+    }
+}
+
+@keyframes morphBackground {
+    0% {
+        border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+    }
+    50% {
+        border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%;
+    }
+    100% {
+        border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+    }
+}
+
+@keyframes gradientMove {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 100% 50%;
+    }
+} 

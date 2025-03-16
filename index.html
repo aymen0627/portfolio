@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Portfolio</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/animations.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">AYMEN</div>
+            <button class="menu-toggle" aria-label="Toggle Menu">Menu</button>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1 class="hero-title">
+                <div class="name-container">
+                    <div class="solari-name">
+                        <div class="solari-group">
+                            <!-- First name -->
+                            <div class="solari-letter" data-final="A"></div>
+                            <div class="solari-letter" data-final="Y"></div>
+                            <div class="solari-letter" data-final="M"></div>
+                            <div class="solari-letter" data-final="E"></div>
+                            <div class="solari-letter" data-final="N"></div>
+                            <!-- Space -->
+                            <div class="solari-space"></div>
+                            <!-- Last name -->
+                            <div class="solari-letter" data-final="H"></div>
+                            <div class="solari-letter" data-final="A"></div>
+                            <div class="solari-letter" data-final="S"></div>
+                            <div class="solari-letter" data-final="N"></div>
+                            <div class="solari-letter" data-final="A"></div>
+                            <div class="solari-letter" data-final="I"></div>
+                            <div class="solari-letter" data-final="N"></div>
+                        </div>
+                    </div>
+                </div>
+            </h1>
+        </section>
+
+        <section class="section-title">
+            <div class="solari-title">
+                <div class="solari-group">
+                    <div class="solari-letter" data-final="P"></div>
+                    <div class="solari-letter" data-final="R"></div>
+                    <div class="solari-letter" data-final="O"></div>
+                    <div class="solari-letter" data-final="J"></div>
+                    <div class="solari-letter" data-final="E"></div>
+                    <div class="solari-letter" data-final="C"></div>
+                    <div class="solari-letter" data-final="T"></div>
+                    <div class="solari-letter" data-final="S"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="experience-cards">
+            <div class="card-deck">
+                <div class="card" data-project="sophie-zwartkruis">
+                    <div class="card-image">
+                        <img src="assets/images/sophie.jpg" alt="Sophie Zwartkruis Portrait">
+                    </div>
+                    <div class="card-content">
+                        <h2 class="card-title">SOPHIE<br>ZWARTKRUIS</h2>
+                        <div class="card-footer">
+                            <div class="tags">
+                                <span>2024</span>
+                                <span>DEV</span>
+                                <span>GSAP</span>
+                                <span>MOTION</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="next-card">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="card">
+                    <div class="card-image">
+                        <!-- Second card image -->
+                    </div>
+                    <div class="card-content">
+                        <h2 class="card-title">ANOTHER<br>PROJECT</h2>
+                        <div class="card-footer">
+                            <div class="tags">
+                                <span>2024</span>
+                                <span>UI/UX</span>
+                                <span>DESIGN</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="next-card">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="scripts/main.js"></script>
+</body>
+</html> 

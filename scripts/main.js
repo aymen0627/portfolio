@@ -1,0 +1,372 @@
+gsap.registerPlugin(ScrollTrigger);
+
+class CardDeck {
+    constructor() {
+        this.cards = Array.from(document.querySelectorAll('.card'));
+        this.buttons = document.querySelectorAll('.next-card');
+        this.currentIndex = 0;
+        this.isAnimating = false;
+        this.touchStartX = 0;
+        this.touchEndX = 0;
+        
+        this.init();
+        this.setupTouchEvents();
+        this.setupCardClicks();
+    }
+
+    init() {
+        // Set initial active state
+        this.cards[0].classList.add('active');
+        
+        this.buttons.forEach(button => {
+            button.addEventListener('click', () => this.nextCard());
+        });
+    }
+
+    setupTouchEvents() {
+        const deck = document.querySelector('.card-deck');
+        
+        deck.addEventListener('touchstart', (e) => {
+            this.touchStartX = e.touches[0].clientX;
+        }, { passive: true });
+
+        deck.addEventListener('touchmove', (e) => {
+            if (this.isAnimating) return;
+            
+            this.touchEndX = e.touches[0].clientX;
+            const currentCard = this.cards[this.currentIndex];
+            const diff = this.touchStartX - this.touchEndX;
+            const percentage = (diff / window.innerWidth) * 100;
+            
+            // Add resistance to the drag
+            const dampenedPercentage = Math.min(Math.abs(percentage), 40) * Math.sign(percentage);
+            
+            gsap.set(currentCard, {
+                x: -dampenedPercentage + '%',
+                rotate: -dampenedPercentage * 0.05
+            });
+        }, { passive: true });
+
+        deck.addEventListener('touchend', () => {
+            const diff = this.touchStartX - this.touchEndX;
+            
+            if (Math.abs(diff) > 100) { // Threshold for swipe
+                this.nextCard();
+            } else {
+                // Reset card position if swipe wasn't far enough
+                gsap.to(this.cards[this.currentIndex], {
+                    x: 0,
+                    rotate: 0,
+                    duration: 0.3
+                });
+            }
+        });
+    }
+
+    nextCard() {
+        if (this.isAnimating) return;
+        this.isAnimating = true;
+
+        const currentCard = this.cards[this.currentIndex];
+        const nextIndex = (this.currentIndex + 1) % this.cards.length;
+        const nextCard = this.cards[nextIndex];
+
+        // Enhanced animation sequence
+        gsap.to(currentCard, {
+            x: '-100%',
+            rotate: -5,
+            scale: 0.9,
+            opacity: 0,
+            duration: 0.5,
+            ease: "power2.inOut",
+            onComplete: () => {
+                currentCard.classList.remove('active');
+                gsap.set(currentCard, {
+                    x: '5%',
+                    y: '16px',
+                    rotate: 0,
+                    scale: 1,
+                    opacity: 1,
+                    zIndex: 1
+                });
+            }
+        });
+
+        gsap.fromTo(nextCard,
+            {
+                y: '8px',
+                x: '5%',
+                opacity: 1,
+                rotateY: '2deg',
+                zIndex: 2
+            },
+            {
+                y: '0',
+                x: '0',
+                rotateY: '0deg',
+                opacity: 1,
+                duration: 0.5,
+                ease: "power2.inOut",
+                onComplete: () => {
+                    nextCard.classList.add('active');
+                    this.isAnimating = false;
+                }
+            }
+        );
+
+        // Animate other cards in stack
+        this.cards.forEach((card, index) => {
+            if (index !== this.currentIndex && index !== nextIndex) {
+                gsap.to(card, {
+                    y: parseInt(card.style.transform.split('translateY(')[1]) - 8 || 16,
+                    duration: 0.5,
+                    ease: "power2.inOut"
+                });
+            }
+        });
+
+        this.currentIndex = nextIndex;
+    }
+
+    setupCardClicks() {
+        this.cards.forEach(card => {
+            card.addEventListener('click', (e) => {
+                if (e.target.closest('.next-card')) return;
+                
+                // Get project slug from data attribute
+                const projectSlug = card.dataset.project;
+                this.navigateToProject(card, projectSlug);
+            });
+        });
+    }
+
+    navigateToProject(card, projectSlug) {
+        if (this.isAnimating) return;
+        this.isAnimating = true;
+
+        // Create project page transition overlay
+        const overlay = document.createElement('div');
+        overlay.className = 'page-transition';
+        document.body.appendChild(overlay);
+
+        // Animate transition
+        const tl = gsap.timeline({
+            onComplete: () => {
+                // Actually navigate to the project page
+                window.location.href = `/projects/${projectSlug}`;
+            }
+        });
+
+        tl.to(card, {
+            scale: 0.95,
+            duration: 0.3,
+            ease: "power2.inOut"
+        })
+        .to(overlay, {
+            opacity: 1,
+            duration: 0.5,
+            ease: "power2.inOut"
+        });
+    }
+
+    closeProject(projectPage, closeButton) {
+        if (this.isAnimating) return;
+        this.isAnimating = true;
+
+        const tl = gsap.timeline({
+            onComplete: () => {
+                this.isAnimating = false;
+                document.body.style.overflow = '';
+                projectPage.remove();
+                closeButton.remove();
+                // Update URL back to home
+                window.history.pushState({}, '', '/');
+            }
+        });
+
+        tl.to(projectPage, {
+            opacity: 0,
+            duration: 0.3,
+            ease: "power2.inOut"
+        })
+        .to(closeButton, {
+            opacity: 0,
+            duration: 0.2
+        });
+    }
+}
+
+// Add at the beginning of the file
+function handleScroll() {
+    const cardsSection = document.querySelector('.experience-cards');
+    const heroHeight = window.innerHeight;
+    
+    if (window.scrollY > heroHeight / 2) {
+        // Only handle card interactions here if needed
+        // Remove the visibility toggle
+    }
+}
+
+// Add scroll listener
+window.addEventListener('scroll', handleScroll);
+
+function animateName() {
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    
+    function getRandomLetter() {
+        return letters[Math.floor(Math.random() * letters.length)];
+    }
+
+    // Initial state
+    gsap.set('.solari-letter', { opacity: 0 });
+
+    // Fade in the container
+    gsap.to('.solari-name', {
+        opacity: 1,
+        duration: 0.3
+    });
+
+    const solariLetters = document.querySelectorAll('.solari-letter');
+    const totalLetters = solariLetters.length;
+
+    // Animate each letter
+    solariLetters.forEach((letter, index) => {
+        const finalLetter = letter.dataset.final;
+        const isLastName = index >= 7;
+        
+        // Calculate position from end for last name
+        const positionFromEnd = isLastName ? totalLetters - index : index;
+        
+        // Fade in each letter slot
+        gsap.to(letter, {
+            opacity: 1,
+            duration: 0.2,
+            delay: index * 0.05
+        });
+
+        let currentLetter = getRandomLetter();
+        let iterations = 0;
+        
+        // Adjust iterations based on position
+        const maxIterations = isLastName 
+            ? 4 + positionFromEnd  // More iterations for letters at the end
+            : 8 + index;          // Keep first name timing the same
+        
+        const interval = setInterval(() => {
+            letter.textContent = currentLetter;
+            
+            if (iterations >= maxIterations && currentLetter === finalLetter) {
+                clearInterval(interval);
+                return;
+            }
+            
+            if (iterations >= maxIterations) {
+                currentLetter = finalLetter;
+            } else {
+                currentLetter = getRandomLetter();
+            }
+            
+            iterations++;
+        }, isLastName 
+            ? 40 + (positionFromEnd * 20)  // Slower interval for letters at the end
+            : 60 + (index * 30));          // Keep first name timing the same
+    });
+}
+
+function animateTitle() {
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    
+    ScrollTrigger.create({
+        trigger: '.section-title',
+        start: 'top center+=100',
+        end: 'bottom center',
+        markers: true,
+        once: true,
+        onEnter: () => {
+            // First make the section visible
+            gsap.to('.section-title', {
+                opacity: 1,
+                duration: 0.3
+            });
+
+            // Then make the title container visible
+            gsap.to('.solari-title', {
+                opacity: 1,
+                duration: 0.3
+            });
+
+            // Then animate letters
+            const titleLetters = document.querySelectorAll('.section-title .solari-letter');
+            titleLetters.forEach((letter, index) => {
+                const finalLetter = letter.dataset.final;
+                
+                gsap.to(letter, {
+                    opacity: 1,
+                    duration: 0.2,
+                    delay: index * 0.05
+                });
+
+                let currentLetter = getRandomLetter();
+                let iterations = 0;
+                const maxIterations = 3 + index;
+                
+                const interval = setInterval(() => {
+                    letter.textContent = currentLetter;
+                    
+                    if (iterations >= maxIterations && currentLetter === finalLetter) {
+                        clearInterval(interval);
+                        return;
+                    }
+                    
+                    if (iterations >= maxIterations) {
+                        currentLetter = finalLetter;
+                    } else {
+                        currentLetter = getRandomLetter();
+                    }
+                    
+                    iterations++;
+                }, 40);
+            });
+        }
+    });
+}
+
+// Initialize ScrollTrigger with smoother settings
+gsap.config({
+    force3D: true      // Force GPU acceleration
+});
+
+// Update your ScrollTrigger configuration
+ScrollTrigger.config({
+    ignoreMobileResize: true,
+    syncInterval: 60,
+    autoRefreshEvents: 'visibilitychange,DOMContentLoaded,load' // More efficient refresh
+});
+
+// Initialize ScrollSmoother before other animations
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize ScrollSmoother first
+    animateName();
+    animateTitle();
+    const cardDeck = new CardDeck();
+    handleScroll();
+});
+
+// Close expanded card when clicking outside or pressing escape
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.card')) {
+        document.querySelectorAll('.card.expanded').forEach(card => {
+            card.classList.remove('expanded');
+        });
+        document.body.style.overflow = '';
+    }
+});
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        document.querySelectorAll('.card.expanded').forEach(card => {
+            card.classList.remove('expanded');
+        });
+        document.body.style.overflow = '';
+    }
+}); 
