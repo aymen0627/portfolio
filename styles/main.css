@@ -1,8 +1,10 @@
 :root {
-    --primary-color: #6E5FF5;  /* Purple color like in the image */
+    --primary-color: #FF930F;  /* Vibrant orange */
+    --secondary-color: #FFB534; /* Mid transition */
+    --accent-color: #FFF95B;   /* Bright yellow */
     --background-color: #ffffff;
-    --text-color: #6E5FF5;
-    --shadow-color: #9F94F5;
+    --text-color: #FF930F;
+    --shadow-color: #FFB534;
     --transition-speed: 0.3s;
 }
 
@@ -11,21 +13,13 @@ body {
     padding: 0;
     min-height: 100vh;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background-color: var(--background-color);
-    color: var(--text-color);
+    background: radial-gradient(
+        circle at center,
+        #FFB534 0%,
+        #FF930F 100%
+    );
+    color: #1a1a1a;
     position: relative;
-    background-image: linear-gradient(
-            rgba(110, 95, 245, 0.05) 1px, 
-            transparent 1px
-        ),
-        linear-gradient(
-            90deg, 
-            rgba(110, 95, 245, 0.05) 1px, 
-            transparent 1px
-        );
-    background-size: 50px 50px;
-    background-position: center center;
-    background-attachment: fixed;
 }
 
 .header {
@@ -47,11 +41,12 @@ body {
 .logo {
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--primary-color);
+    color: #1a1a1a;
     text-decoration: none;
-    mix-blend-mode: difference;
+    mix-blend-mode: normal;
     transition: transform 0.3s ease;
     color: white; /* Make sure it's visible on all backgrounds */
+    opacity: 0.9;
 }
 
 .hero {
@@ -62,27 +57,103 @@ body {
     align-items: center;
     padding: 2rem;
     position: relative;
-    text-align: center;
     overflow: hidden;
-    mask-image: linear-gradient(to bottom, 
+    background: transparent;
+    /* Add gradient mask to soften the bottom edge */
+    mask-image: linear-gradient(
+        to bottom,
         rgba(0, 0, 0, 1) 0%,
         rgba(0, 0, 0, 1) 85%,
         rgba(0, 0, 0, 0) 100%
     );
-    -webkit-mask-image: linear-gradient(to bottom, 
+    -webkit-mask-image: linear-gradient(
+        to bottom,
         rgba(0, 0, 0, 1) 0%,
         rgba(0, 0, 0, 1) 85%,
         rgba(0, 0, 0, 0) 100%
     );
 }
 
+.hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+}
+
+.hero-image {
+    width: min(500px, 90vw);
+    height: auto;
+    position: relative;
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-image img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.15));
+    transition: all 0.3s ease;
+}
+
+/* Create a subtle glow effect behind the image */
+.hero-image::before {
+    content: '';
+    position: absolute;
+    width: 120%;
+    height: 120%;
+    background: radial-gradient(
+        circle at center,
+        rgba(255, 147, 15, 0.2) 0%,
+        rgba(255, 249, 91, 0.1) 40%,
+        transparent 70%
+    );
+    filter: blur(40px);
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Ambient light effect */
+.hero-image::after {
+    content: '';
+    position: absolute;
+    inset: -50%;
+    background: radial-gradient(
+        circle at center,
+        rgba(255, 147, 15, 0.1),
+        transparent 70%
+    );
+    opacity: 0.6;
+    z-index: -2;
+    pointer-events: none;
+}
+
+/* Add subtle interaction */
+.hero-image:hover img {
+    transform: translateY(-5px);
+    filter: drop-shadow(0 15px 40px rgba(0, 0, 0, 0.2));
+}
+
 .name-container {
     position: relative;
-    height: 100vh;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 900;
+    color: #1a1a1a;
+    text-align: center;
+    letter-spacing: -0.02em;
+    padding: 1rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .initials {
@@ -184,18 +255,18 @@ body {
     height: 150%;
     background: linear-gradient(
         45deg,
-        rgba(110, 95, 245, 0.15) 0%,    /* Increased opacity */
-        rgba(159, 148, 245, 0.1) 25%,
-        rgba(110, 95, 245, 0.2) 50%,     /* Increased opacity */
-        rgba(159, 148, 245, 0.1) 75%,
-        rgba(110, 95, 245, 0.15) 100%
+        rgba(255, 147, 15, 0.15) 0%,    /* Orange */
+        rgba(255, 181, 52, 0.2) 25%,     /* Mid transition */
+        rgba(255, 249, 91, 0.25) 50%,    /* Yellow */
+        rgba(255, 181, 52, 0.2) 75%,     /* Mid transition */
+        rgba(255, 147, 15, 0.15) 100%    /* Orange */
     );
-    background-size: 300% 300%;          /* Reduced size for more visible movement */
+    background-size: 300% 300%;
     z-index: -1;
     border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
     filter: blur(30px);
-    animation: morphBackground 8s ease-in-out infinite,    /* Faster animation */
-               gradientMove 6s ease-in-out infinite;       /* Faster animation */
+    animation: morphBackground 8s ease-in-out infinite,
+               gradientMove 6s ease-in-out infinite;
     pointer-events: none;
 }
 
@@ -209,7 +280,15 @@ body {
 
 /* Remove the previous .hero::before that was creating the banner */
 .hero::before {
-    display: none;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+    opacity: 0.03;
+    pointer-events: none;
 }
 
 /* Add subtle glow effect */
@@ -220,8 +299,8 @@ body {
     color: var(--primary-color);
     position: relative;
     text-shadow: 
-        0 0 30px rgba(110, 95, 245, 0.3),
-        0 0 60px rgba(110, 95, 245, 0.2);
+        0 0 30px rgba(255, 147, 15, 0.3),
+        0 0 60px rgba(255, 181, 52, 0.2);
 }
 
 /* Remove the previous animation styles */
@@ -284,13 +363,10 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-top: 8rem;
-    margin-top: -4rem;
-    background: linear-gradient(to bottom,
-        rgba(255, 255, 255, 0) 0%,
-        var(--background-color) 8%,
-        var(--background-color) 100%
-    );
+    padding-top: 4rem; /* Adjust padding */
+    background-color: #FFF4E0; /* Light warm yellow background */
+    margin-top: -1px; /* Prevent tiny gaps */
+    z-index: 4;
 }
 
 .card-deck {
@@ -306,14 +382,14 @@ body {
     position: absolute;
     width: 100%;
     height: 100%;
-    background: #F5F5F3;
+    background: #FFFFFF; /* Keep cards white */
     border-radius: 24px;
     overflow: hidden;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08); /* Softer shadow for light bg */
     transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
     transform-origin: center;
-    backface-visibility: hidden; /* Prevent flickering during animations */
-    will-change: transform, opacity; /* Optimize animations */
+    backface-visibility: hidden;
+    will-change: transform, opacity;
     cursor: pointer;
 }
 
@@ -559,40 +635,28 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    opacity: 0;
-    transform: translateY(0);
-    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    background: linear-gradient(
+        to bottom,
+        rgba(255, 181, 52, 0) 0%, /* Transparent start */
+        rgba(255, 244, 224, 0.2) 20%, /* Faint yellow tint */
+        #FFF4E0 50%, /* Transition to light yellow */
+        #FFF4E0 100%
+    );
+    margin-top: -4rem; /* Pull it up slightly into the masked area */
+    padding-top: 8rem; /* Adjust padding to compensate for margin */
+    z-index: 5; /* Ensure it sits correctly */
 }
 
-.solari-title {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    opacity: 0;
-}
-
-.solari-title .solari-group {
-    display: flex;
-    gap: 0.02em;
-    align-items: center;
-}
-
-.solari-title .solari-letter {
+.section-title h2 {
     font-size: clamp(2rem, 6vw, 4rem);
     font-weight: 900;
-    color: var(--primary-color);
-    width: 0.85em;
-    height: 1.2em;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    perspective: 400px;
-    opacity: 0;
-}
-
-/* Add subtle parallax effect */
-[data-speed] {
-    will-change: transform;
+    color: #1a1a1a; /* Back to dark color for contrast */
+    margin: 0;
+    letter-spacing: 0.1em;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+    background: none;
+    -webkit-background-clip: initial;
+    background-clip: initial;
 }
 
 /* Update the expanded card styles */
@@ -787,4 +851,108 @@ html {
     pointer-events: none;
     transform-origin: center;
     will-change: transform;
+}
+
+/* Progress Banner Styles */
+.progress-banner {
+    position: fixed;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    pointer-events: none;
+    z-index: 1000;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateY(-50%);
+    animation: bannerFade 4s ease-in-out forwards;
+}
+
+.progress-banner span {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 1rem 0;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 147, 15, 0.1) 0%,
+        rgba(255, 181, 52, 0.3) 25%,
+        rgba(255, 249, 91, 0.5) 50%,
+        rgba(255, 181, 52, 0.3) 75%,
+        rgba(255, 147, 15, 0.1) 100%
+    );
+    color: #FFF;
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    font-weight: 900;
+    text-align: center;
+    animation: bannerGlow 3s ease-in-out infinite;
+    text-shadow: 
+        0 0 10px rgba(255, 147, 15, 0.8),
+        0 0 20px rgba(255, 181, 52, 0.6),
+        0 0 30px rgba(255, 249, 91, 0.4),
+        0 0 40px rgba(255, 147, 15, 0.2);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    letter-spacing: 0.2em;
+    white-space: nowrap;
+}
+
+@keyframes bannerGlow {
+    0%, 100% {
+        box-shadow: 
+            0 0 20px rgba(255, 147, 15, 0.4),
+            0 0 40px rgba(255, 181, 52, 0.3),
+            0 0 60px rgba(255, 249, 91, 0.2);
+        opacity: 0.9;
+    }
+    50% {
+        box-shadow: 
+            0 0 30px rgba(255, 147, 15, 0.6),
+            0 0 60px rgba(255, 181, 52, 0.4),
+            0 0 90px rgba(255, 249, 91, 0.3);
+        opacity: 1;
+    }
+}
+
+@keyframes bannerFade {
+    0% {
+        opacity: 0;
+        transform: translateY(-50%) translateX(-100%);
+    }
+    10% {
+        opacity: 1;
+        transform: translateY(-50%) translateX(0);
+    }
+    90% {
+        opacity: 1;
+        transform: translateY(-50%) translateX(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-50%) translateX(100%);
+    }
+}
+
+/* Add responsive adjustments */
+@media (max-width: 768px) {
+    .hero-content {
+        gap: 1rem;
+    }
+
+    .hero-image {
+        width: min(400px, 85vw);
+        margin-bottom: 1rem;
+    }
+
+    .hero-image::before {
+        width: 140%;
+        height: 140%;
+    }
+
+    .name-container {
+        font-size: clamp(2rem, 6vw, 4rem);
+    }
 } 

@@ -168,7 +168,8 @@ class CardDeck {
         // Animate transition
         const tl = gsap.timeline({
             onComplete: () => {
-                window.location.href = `/projects/${projectSlug}`;
+                // Navigate using a relative path from root
+                window.location.href = `projects/${projectSlug}/index.html`;
             }
         });
 
@@ -228,126 +229,6 @@ function handleScroll() {
 // Add scroll listener
 window.addEventListener('scroll', handleScroll);
 
-function animateName() {
-    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    
-    function getRandomLetter() {
-        return letters[Math.floor(Math.random() * letters.length)];
-    }
-
-    // Initial state
-    gsap.set('.solari-letter', { opacity: 0 });
-
-    // Fade in the container
-    gsap.to('.solari-name', {
-        opacity: 1,
-        duration: 0.3
-    });
-
-    const solariLetters = document.querySelectorAll('.solari-letter');
-    const totalLetters = solariLetters.length;
-
-    // Animate each letter
-    solariLetters.forEach((letter, index) => {
-        const finalLetter = letter.dataset.final;
-        const isLastName = index >= 7;
-        
-        // Calculate position from end for last name
-        const positionFromEnd = isLastName ? totalLetters - index : index;
-        
-        // Fade in each letter slot
-        gsap.to(letter, {
-            opacity: 1,
-            duration: 0.2,
-            delay: index * 0.05
-        });
-
-        let currentLetter = getRandomLetter();
-        let iterations = 0;
-        
-        // Adjust iterations based on position
-        const maxIterations = isLastName 
-            ? 4 + positionFromEnd  // More iterations for letters at the end
-            : 8 + index;          // Keep first name timing the same
-        
-        const interval = setInterval(() => {
-            letter.textContent = currentLetter;
-            
-            if (iterations >= maxIterations && currentLetter === finalLetter) {
-                clearInterval(interval);
-                return;
-            }
-            
-            if (iterations >= maxIterations) {
-                currentLetter = finalLetter;
-            } else {
-                currentLetter = getRandomLetter();
-            }
-            
-            iterations++;
-        }, isLastName 
-            ? 40 + (positionFromEnd * 20)  // Slower interval for letters at the end
-            : 60 + (index * 30));          // Keep first name timing the same
-    });
-}
-
-function animateTitle() {
-    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    
-    ScrollTrigger.create({
-        trigger: '.section-title',
-        start: 'top center+=100',
-        end: 'bottom center',
-        once: true,
-        onEnter: () => {
-            // First make the section visible
-            gsap.to('.section-title', {
-                opacity: 1,
-                duration: 0.3
-            });
-
-            // Then make the title container visible
-            gsap.to('.solari-title', {
-                opacity: 1,
-                duration: 0.3
-            });
-
-            // Then animate letters
-            const titleLetters = document.querySelectorAll('.section-title .solari-letter');
-            titleLetters.forEach((letter, index) => {
-                const finalLetter = letter.dataset.final;
-                
-                gsap.to(letter, {
-                    opacity: 1,
-                    duration: 0.2,
-                    delay: index * 0.05
-                });
-
-                let currentLetter = getRandomLetter();
-                let iterations = 0;
-                const maxIterations = 3 + index;
-                
-                const interval = setInterval(() => {
-                    letter.textContent = currentLetter;
-                    
-                    if (iterations >= maxIterations && currentLetter === finalLetter) {
-                        clearInterval(interval);
-                        return;
-                    }
-                    
-                    if (iterations >= maxIterations) {
-                        currentLetter = finalLetter;
-                    } else {
-                        currentLetter = getRandomLetter();
-                    }
-                    
-                    iterations++;
-                }, 40);
-            });
-        }
-    });
-}
-
 // Initialize ScrollTrigger with smoother settings
 gsap.config({
     force3D: true      // Force GPU acceleration
@@ -360,11 +241,7 @@ ScrollTrigger.config({
     autoRefreshEvents: 'visibilitychange,DOMContentLoaded,load' // More efficient refresh
 });
 
-// Initialize ScrollSmoother before other animations
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize ScrollSmoother first
-    animateName();
-    animateTitle();
     const cardDeck = new CardDeck();
     handleScroll();
 
