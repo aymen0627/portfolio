@@ -168,8 +168,8 @@ class CardDeck {
         // Animate transition
         const tl = gsap.timeline({
             onComplete: () => {
-                // Navigate using a relative path from root
-                window.location.href = `projects/${projectSlug}/index.html`;
+                // Navigate using the clean URL (correct for Vercel)
+                window.location.href = `/projects/${projectSlug}/`;
             }
         });
 
